@@ -16,6 +16,7 @@ namespace SpecFlowProjectTest.PageObjects
         {
             _driver = driver;
             _appSettings = new AppSettings();
+            utilities = new Utilities(_driver);
         }
 
 

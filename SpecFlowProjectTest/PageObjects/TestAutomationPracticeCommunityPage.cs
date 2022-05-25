@@ -10,11 +10,13 @@ namespace SpecFlowProjectTest.PageObjects
     {
         private IWebDriver _driver;
         private readonly AppSettings _appSettings;
+        private Utilities utilities;
 
         public TestAutomationPracticeCommunityPage(IWebDriver driver)
         {
             _driver = driver;
             _appSettings = new AppSettings();
+            utilities = new Utilities(_driver);
         }
 
 

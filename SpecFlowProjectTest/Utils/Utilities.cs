@@ -5,6 +5,8 @@ using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using Excel= Microsoft.Office.Interop.Excel;
+using System.Collections;
+using System.Runtime.InteropServices;
 
 namespace SpecFlowProjectTest.Utils
 {
@@ -14,7 +16,13 @@ namespace SpecFlowProjectTest.Utils
         private readonly int _implicitWaitSec = 20;
         private readonly int _conditionWait = 1;
 
-       
+        Excel.Application xlApp = null;
+        Excel.Workbooks workbooks = null;
+        Excel.Workbook workbook = null;
+        Hashtable sheets;
+        public string xlFilePath;
+
+
         public Utilities(IWebDriver Driver)
         {
             _driver = Driver;
@@ -280,31 +288,77 @@ namespace SpecFlowProjectTest.Utils
             }
         }
 
-        public void WriteDataToExcel(string filename)
+        public void OpenExcel()
         {
-            Excel.Application excelApp = new Excel.Application();
-            if (excelApp != null)
+            xlApp = new Excel.Application();
+            workbooks = xlApp.Workbooks;
+            workbook = workbooks.Open(xlFilePath);
+            sheets = new Hashtable();
+            int count = 1;
+            // Storing worksheet names in Hashtable.
+            foreach (Excel.Worksheet sheet in workbook.Sheets)
             {
-                Excel.Workbook excelWorkbook = excelApp.Workbooks.Add();
-                Excel.Worksheet excelWorksheet = (Excel.Worksheet)excelWorkbook.Sheets.Add();
-
-                excelWorksheet.Cells[1, 1] = "GroupName";
-                excelWorksheet.Cells[1, 2] = "MemberCount";
-                excelWorksheet.Cells[3, 1] = "Value3";
-                excelWorksheet.Cells[4, 1] = "Value4";
-
-                excelApp.ActiveWorkbook.SaveAs(@"C:\" + filename + ".xls", Excel.XlFileFormat.xlWorkbookNormal);
-
-                excelWorkbook.Close();
-                excelApp.Quit();
-
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(excelWorksheet);
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(excelWorkbook);
-                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(excelApp);
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
+                sheets[count] = sheet.Name;
+                count++;
             }
         }
+
+        public bool SetCellData(string sheetName, int colName, int rowNumber, string value)
+        {
+            OpenExcel();
+
+            int sheetValue = 0;
+            int colNumber = 0;
+
+            try
+            {
+                if (sheets.ContainsValue(sheetName))
+                {
+                    foreach (DictionaryEntry sheet in sheets)
+                    {
+                        if (sheet.Value.Equals(sheetName))
+                        {
+                            sheetValue = (int)sheet.Key;
+                        }
+                    }
+
+                    Excel.Worksheet worksheet = null;
+                    worksheet = workbook.Worksheets[sheetValue] as Excel.Worksheet;
+                    Excel.Range range = worksheet.UsedRange;
+
+                    for (int i = 1; i <= range.Columns.Count; i++)
+                    {
+                        string colNameValue = Convert.ToString((range.Cells[1, i] as Excel.Range).Value2);
+                       
+                            colNumber = i;
+                            break;
+                        
+                    }
+
+                    range.Cells[rowNumber, colNumber] = value;
+
+                    workbook.Save();
+                    Marshal.FinalReleaseComObject(worksheet);
+                    worksheet = null;
+
+                    CloseExcel();
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public void CloseExcel()
+        {
+            workbook.Close(false, xlFilePath, null); // Close the connection to workbook
+            workbooks.Close();
+            xlApp.Quit();
+        }
+
+
 
     }
 }

@@ -7,3 +7,6 @@
 /.vs/SpecFlowProjectTest/v16
 /.vs/SpecFlowProjectTest/v17/TestStore/0
 /.vs/SpecFlowProjectTest/v17/.suo
+/SpecFlowProjectTest/Features/NQLBTest.feature.cs
+/SpecFlowProjectTest/Features/CommunityTest.feature.cs
+/SpecFlowProjectTest/Features/TestAutomationPracticeTest.feature.cs

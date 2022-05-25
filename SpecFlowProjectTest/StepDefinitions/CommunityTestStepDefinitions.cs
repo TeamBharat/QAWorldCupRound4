@@ -27,23 +27,8 @@ namespace SpecFlowProjectTest.StepDefinitions
         [Given(@"I Fetch the details like Group name, member count")]
         public void GivenIFetchTheDetailsLikeGroupNameMemberCount()
         {
-            <List> WebElement community =//span[contains(@class,'groupName')]
-            < List > WebElement communitycount =//div[contains(@class,'entityCardHeader')]/following-sibling::div/descendant::span[5]
-              Dictionary<string, int> map = new Dictionary<string, int>();
 
-            for (int i = 0; i <= community.count(); i++) {
-                map.add(community[i].getAttribute("title"), communitycount[i].gettext())
-            }
-            
-            int i = 0
-            foreach (KeyValuePair<string, Int16> community in map)
-            {
-                Console.WriteLine("Key: {0}, Value: {1}",
-                community.Key, community.Value);
-                setcelldata("Sheetname", i, 1, community.Key)
-                 setcelldata("Sheetname", i, 2, community.value)
-                 i = i + 1;
-            }
+            _communityPage.GetCommunityName();
         }
 
         [When(@"I Sort details fetched in above in ascending order of the team member count")]
