@@ -1,5 +1,6 @@
 ﻿Feature: Google Search
 
+@mytag
 Scenario: Search Item on Google
 	Given I navigate to google application
 	And I enter some test
