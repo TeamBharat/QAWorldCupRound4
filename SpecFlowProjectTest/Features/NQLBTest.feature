@@ -3,7 +3,6 @@
 A short summary of the feature
 
 @tag1
-Scenario: [scenario name]
-	Given [context]
-	When [action]
-	Then [outcome]
+Scenario: Sorting member name and their email ids
+	When   I Fetch the member name and email id in alphabetical ascending order 
+	Then  I save the data in Excel

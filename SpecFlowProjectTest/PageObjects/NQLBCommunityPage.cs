@@ -21,9 +21,12 @@ namespace SpecFlowProjectTest.PageObjects
 
         IWebElement memberCountLink => _driver.FindElement(By.XPath("//span[text()='Members']/ancestor::h2/following-sibling::span/button"));
 
-        IWebElement Password => _driver.FindElement(By.Name("Password"));
 
-        IWebElement Submit => _driver.FindElement(By.Name("Login"));
+        IList<IWebElement> MemberName => _driver.FindElements(By.XPath("//span[contains(text(),'Community members')]/../following-sibling::ul/descendant::span/span[@dir='auto']"));
+
+
+        IList<IWebElement> MemberEmailId => _driver.FindElements(By.XPath("//span[contains(text(),'Community members')]/../following-sibling::ul/descendant::div[contains(text(),'@nagarro.com')]"));
+
 
 
 
@@ -38,6 +41,14 @@ namespace SpecFlowProjectTest.PageObjects
         public void NavigateToNQLBCommunityPage()
         {
             _driver.Navigate().GoToUrl(_appSettings._configuration["Environments:NQLB"]);
+        }
+        public void ClickonmemberCountLink()
+        {
+            memberCountLink.Click();
+        }
+        public void MemberNameList()
+        {
+            
         }
 
     }
