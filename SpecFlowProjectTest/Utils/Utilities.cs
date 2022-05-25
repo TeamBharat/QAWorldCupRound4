@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using Excel= Microsoft.Office.Interop.Excel;
 
 namespace SpecFlowProjectTest.Utils
 {
@@ -13,6 +14,7 @@ namespace SpecFlowProjectTest.Utils
         private readonly int _implicitWaitSec = 20;
         private readonly int _conditionWait = 1;
 
+       
         public Utilities(IWebDriver Driver)
         {
             _driver = Driver;
@@ -277,5 +279,32 @@ namespace SpecFlowProjectTest.Utils
                 LogHelper.Write(webelement +" dropdown is already selected");
             }
         }
+
+        public void WriteDataToExcel(string filename)
+        {
+            Excel.Application excelApp = new Excel.Application();
+            if (excelApp != null)
+            {
+                Excel.Workbook excelWorkbook = excelApp.Workbooks.Add();
+                Excel.Worksheet excelWorksheet = (Excel.Worksheet)excelWorkbook.Sheets.Add();
+
+                excelWorksheet.Cells[1, 1] = "GroupName";
+                excelWorksheet.Cells[1, 2] = "MemberCount";
+                excelWorksheet.Cells[3, 1] = "Value3";
+                excelWorksheet.Cells[4, 1] = "Value4";
+
+                excelApp.ActiveWorkbook.SaveAs(@"C:\" + filename + ".xls", Excel.XlFileFormat.xlWorkbookNormal);
+
+                excelWorkbook.Close();
+                excelApp.Quit();
+
+                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(excelWorksheet);
+                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(excelWorkbook);
+                System.Runtime.InteropServices.Marshal.FinalReleaseComObject(excelApp);
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
+        }
+
     }
 }

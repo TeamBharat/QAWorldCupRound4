@@ -1,7 +1,6 @@
 ﻿using BoDi;
 using OpenQA.Selenium.Chrome;
 using Microsoft.Extensions.Configuration;
-using SpecFlowProjectTest.Utils;
 using TechTalk.SpecFlow.TestFramework;
 using OpenQA.Selenium.Remote;
 using System.Runtime.CompilerServices;
@@ -42,6 +41,13 @@ namespace SpecFlowProjectTest.Hooks
         [BeforeScenario]
         public void BeforeScenario()
         {
+            string currentUser=System.Environment.UserName;
+            ChromeOptions chroptions = new ChromeOptions();
+            chroptions.AddArguments("--noerrdialogs");
+            chroptions.AddArguments(@"user-data-dir=C:\Users\" + currentUser + @"\AppData\Local\Google\Chrome\User Data");
+            chroptions.AddAdditionalCapability("useAutomationExtension", false);
+            chroptions.AddArgument("no-sandbox");
+
             _timeout = TimeSpan.FromMinutes(10);
             new WebDriverManager.DriverManager().SetUpDriver(new ChromeConfig());
             _driver = new ChromeDriver();

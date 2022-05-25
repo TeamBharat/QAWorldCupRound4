@@ -1,0 +1,9 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/SpecFlowProjectTest/config
+/.vs/SpecFlowProjectTest/DesignTimeBuild/.dtbcache.v2
+/.vs/SpecFlowProjectTest/v16
+/.vs/SpecFlowProjectTest/v17/TestStore/0
+/.vs/SpecFlowProjectTest/v17/.suo
